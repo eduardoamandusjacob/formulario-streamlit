@@ -1,8 +1,6 @@
 import streamlit as st
 import psycopg2
 
-DATABASE_URL = st.secrets.get("DATABASE_URL")
-
 st.title('Formulário em blocos')
 
 if not st.session_state.get('primeiro_bloco_ok', False):
@@ -27,6 +25,7 @@ if st.session_state.get('primeiro_bloco_ok', False):
         st.success('segundo bloco enviado com sucesso!')
 
         #conexao com o banco de dados PostgreSQL - Neon
+        DATABASE_URL = st.secrets.get("DATABASE_URL")
         dados_conexao = st.secrets["DATABASE_URL"]
         conexao = psycopg2.connect(DATABASE_URL, sslmode="require")
         cursor = conexao.cursor()
