@@ -1,6 +1,8 @@
 import streamlit as st
 import psycopg2
 
+DATABASE_URL = st.secrets.get("DATABASE_URL")
+
 st.title('Formulário em blocos')
 
 if not st.session_state.get('primeiro_bloco_ok', False):
