@@ -25,8 +25,8 @@ if st.session_state.get('primeiro_bloco_ok', False):
         st.success('segundo bloco enviado com sucesso!')
 
         #conexao com o banco de dados PostgreSQL - Neon
-        dados_conexao = st.secrets['dados_conexao']
-        conexao = psycopg2.connect(dados_conexao)
+        dados_conexao = st.secrets["DATABASE_URL"]
+        conexao = psycopg2.connect(DATABASE_URL, sslmode="require")
         cursor = conexao.cursor()
 
         cursor.execute('''
