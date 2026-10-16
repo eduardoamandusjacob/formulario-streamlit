@@ -1,12 +1,5 @@
-# Core
 streamlit==1.26.0
-
-# Banco de dados PostgreSQL
 psycopg2-binary==2.9.7
-
-# Geração de PDF
 fpdf==1.7.2
-
-# Utilitários opcionais
 python-dotenv==1.0.0
-gunicorn==20.1.0
+wheel==0.40.0
