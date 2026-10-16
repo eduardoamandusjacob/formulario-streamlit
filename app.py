@@ -128,6 +128,13 @@ st.markdown(
       font-weight: 800 !important;
     }
 
+    /* Mantém o texto do consentimento visível no fundo escuro */
+    div[data-testid="stCheckbox"] label,
+    div[data-testid="stCheckbox"] label p,
+    div[data-testid="stCheckbox"] span {
+      color: #ffffff !important;
+    }
+
     /* Aumenta tamanho e cor dos inputs de radio/checkbox */
     input[type="radio"], input[type="checkbox"] {
       transform: scale(1.18);
@@ -422,22 +429,15 @@ if st.session_state['etapa_atual'] == 1:
             unsafe_allow_html=True,
         )
 
-        # checkbox + rótulo em colunas para garantir visibilidade do texto
-        col_chk, col_label = st.columns([0.08, 1])
-        with col_chk:
-            consentimento = st.checkbox("", value=st.session_state['dados_formulario'].get('consentimento', False), key="consent_etapa1")
-        with col_label:
-            # rótulo grande e visível com fundo em primary e texto branco (mais suave que o azul anterior)
-            st.markdown(
-                """
-                <div style="display:flex; align-items:center; height:100%;">
-                  <span style="background:var(--primary); color:#ffffff; padding:8px 12px; border-radius:8px; font-size:17px; font-weight:800; display:inline-block;">
-                    Concordo com as informações contidas acima
-                  </span>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+        # Checkbox de consentimento com texto integrado
+        consentimento = st.checkbox(
+            'Concordo com as informações contidas acima',
+            value=st.session_state['dados_formulario'].get('consentimento', False),
+            key="consent_etapa1"
+        )
+
+        # Espaçamento entre o consentimento e o botão de envio
+        st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
 
         btn_enviar_1 = st.form_submit_button('Seguir para a proxima etapa')
 
