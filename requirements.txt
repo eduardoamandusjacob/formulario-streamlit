@@ -1,6 +1,6 @@
+
 streamlit==1.26.0
 psycopg2-binary==2.9.13
 fpdf==1.7.2
 python-dotenv==1.0.0
 wheel==0.40.0
-
