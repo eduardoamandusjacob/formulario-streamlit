@@ -237,6 +237,7 @@ def gerar_pdf_dados(dados: dict) -> bytes:
         ("distribuicao_nivel_anos_iniciais", "Distribuição - Anos iniciais"),
         ("distribuicao_nivel_anos_finais", "Distribuição - Anos finais"),
         ("diagnosticos", "Diagnósticos"),
+        ("outros_diagnosticos", "Outros diagnósticos"),
         ("tendencia_matriculas", "Tendência de matrículas"),
         ("professores_aee", "Professores AEE"),
         ("profissionais_apoio", "Profissionais de apoio"),
@@ -515,9 +516,14 @@ elif st.session_state['etapa_atual'] == 2:
 
         diagnosticos = st.multiselect(
             'Quais são os diagnósticos presentes?',
-            options=['TEA','TDAH','Def. Auditiva','Def. Visual','Def. Intelectual'],
+            options=['TEA','TDAH','Def. Auditiva','Def. Visual','Def. Intelectual','Outros'],
             default=st.session_state['dados_formulario'].get('diagnosticos', [])
         )
+        
+        outros_diagnosticos = st.text_input(
+            "Especifique os outros diagnósticos (Se Houverem):",
+            value=st.session_state['dados_formulario'].get('outros_diagnosticos', "")
+            )
 
         tendencia_matriculas = st.radio(
             'Qual a tendência no número de matriculas nos últimos anos?',
@@ -539,6 +545,7 @@ elif st.session_state['etapa_atual'] == 2:
             'distribuicao_nivel_anos_iniciais' : distribuicao_nivel_anos_iniciais,
             'distribuicao_nivel_anos_finais' : distribuicao_nivel_anos_finais,
             'diagnosticos' : diagnosticos,
+            'outros_diagnosticos': outros_diagnosticos,
             'tendencia_matriculas' : tendencia_matriculas,
         })
         st.session_state['etapa_atual'] = 3
@@ -749,7 +756,7 @@ elif st.session_state['etapa_atual'] == 5:
                     nome_pessoa, cargo_pessoa, nome_escola, etapas_ensino, alunos_matriculados,
                     consentimento, alunos_necessidades, alunos_laudo,
                     distribuicao_nivel_infantil, distribuicao_nivel_anos_iniciais, distribuicao_nivel_anos_finais,
-                    diagnosticos, tendencia_matriculas, professores_aee, profissionais_apoio, deficit_auxiliares,
+                    diagnosticos, outros_diagnosticos, tendencia_matriculas, professores_aee, profissionais_apoio, deficit_auxiliares,
                     modalidade_atendimento, rotatividade_equipe, funcionamento_sala, recursos_tecnologia,
                     aquisicao, participacao_capacitacao, adequacao_formacao, articulaxao_externa, prioridade,
                     updated_at
@@ -757,7 +764,7 @@ elif st.session_state['etapa_atual'] == 5:
                     %s, %s, %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
-                    %s, %s, %s, %s, %s,
+                    %s, %s, %s, %s, %s, %s,
                     %s, %s, %s, %s,
                     %s, %s, %s, %s, %s,
                     now()
@@ -777,6 +784,7 @@ elif st.session_state['etapa_atual'] == 5:
                     dados.get("distribuicao_nivel_anos_iniciais"),
                     dados.get("distribuicao_nivel_anos_finais"),
                     dados.get("diagnosticos"),
+                    dados.get("outros_diagnosticos"),
                     dados.get("tendencia_matriculas"),
                     dados.get("professores_aee"),
                     dados.get("profissionais_apoio"),
