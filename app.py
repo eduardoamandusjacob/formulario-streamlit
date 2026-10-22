@@ -246,10 +246,12 @@ def gerar_pdf_dados(dados: dict) -> bytes:
         ("rotatividade_equipe", "Rotatividade da equipe"),
         ("funcionamento_sala", "Funcionamento da sala de recursos"),
         ("recursos_tecnologia", "Recursos de tecnologia assistiva"),
+        ("outros_recursos_tecnologia", " Outros Recursos de tecnologia assistiva"),
         ("aquisicao", "Recursos / Materiais de aquisição urgente"),
         ("participacao_capacitacao", "Participação em capacitação"),
         ("adequacao_formacao", "Adequação da formação"),
         ("articulaxao_externa", "Articulação com redes externas"),
+        ("outros_articulaxao_externa", " Outras Articulações com redes externas"),
         ("prioridade", "Prioridade Nº1")
     ]
 
@@ -559,6 +561,7 @@ elif st.session_state['etapa_atual'] == 2:
             'distribuicao_nivel_anos_iniciais' : distribuicao_nivel_anos_iniciais,
             'distribuicao_nivel_anos_finais' : distribuicao_nivel_anos_finais,
             'diagnosticos' : diagnosticos,
+            'outros_diagnosticos': outros_diagnosticos,
             'tendencia_matriculas' : tendencia_matriculas,
         })
         st.session_state['etapa_atual'] = 1
@@ -647,8 +650,13 @@ elif st.session_state['etapa_atual'] == 4:
 
         recursos_tecnologia = st.multiselect(
             'Quais são recursos de tecnologia assistiva existentes?',
-            options=['CAA (Comunicação)','Jogos adaptados','Teclado adaptado'],
+            options=['CAA (Comunicação)','Jogos adaptados','Teclado adaptado','Outros'],
             default=st.session_state['dados_formulario'].get('recursos_tecnologia', [])
+        )
+
+        outros_recursos_tecnologia = st.text_input(
+            'Caso existam, Especifique outros recursos técnologicos ',
+             value=st.session_state['dados_formulario'].get('outros_recursos_tecnlogia', "")
         )
 
         aquisicao = st.text_input(
@@ -666,6 +674,7 @@ elif st.session_state['etapa_atual'] == 4:
             st.session_state['dados_formulario'].update({
                 'funcionamento_sala' : funcionamento_sala,
                 'recursos_tecnologia' : recursos_tecnologia,
+                'outros_recursos_tecnologia' : outros_recursos_tecnologia,
                 'aquisicao' : aquisicao,
             })
             st.session_state['etapa_atual'] = 5
@@ -675,6 +684,7 @@ elif st.session_state['etapa_atual'] == 4:
             st.session_state['dados_formulario'].update({
                 'funcionamento_sala' : funcionamento_sala,
                 'recursos_tecnologia' : recursos_tecnologia,
+                'outros_recursos_tecnlogia' : outros_recursos_tecnologia,
                 'aquisicao' : aquisicao,
             })
             st.session_state['etapa_atual'] = 3
@@ -701,8 +711,13 @@ elif st.session_state['etapa_atual'] == 5:
 
         articulaxao_externa = st.multiselect(
             'Existem articulações com redes Externa de Apoio?',
-            options=['APAE','CAPSi / Saúde','CRAS','Clínicas Univ.'],
+            options=['APAE','CAPSi / Saúde','CRAS','Clínicas Univ.','Outros'],
             default=st.session_state['dados_formulario'].get('articulaxao_externa', [])
+        )
+
+        outros_articulaxao_externa = st.text_input(
+            'Caso existam, especificar outras fontes de apoio a escola',
+            value= st.session_state['dados_formulario'].get('outros_articulaxao_externa','')
         )
 
         prioridade = st.radio(
@@ -722,6 +737,7 @@ elif st.session_state['etapa_atual'] == 5:
             'participacao_capacitacao' : participacao_capacitacao,
             'adequacao_formacao' : adequacao_formacao,
             'articulaxao_externa' : articulaxao_externa,
+            'outros_articulaxao_externa' : outros_articulaxao_externa,
             'prioridade' : prioridade,
         })
         st.text('Você completou o preenchimento')
@@ -731,6 +747,7 @@ elif st.session_state['etapa_atual'] == 5:
             'participacao_capacitacao' : participacao_capacitacao,
             'adequacao_formacao' : adequacao_formacao,
             'articulaxao_externa' : articulaxao_externa,
+            'outros_articulaxao_externa' : outros_articulaxao_externa,
             'prioridade' : prioridade,
         })
         st.session_state['etapa_atual'] = 4
@@ -741,6 +758,7 @@ elif st.session_state['etapa_atual'] == 5:
             'participacao_capacitacao' : participacao_capacitacao,
             'adequacao_formacao' : adequacao_formacao,
             'articulaxao_externa' : articulaxao_externa,
+            'outros_articulaxao_externa' : outros_articulaxao_externa,
             'prioridade' : prioridade,
         })
 
@@ -757,16 +775,16 @@ elif st.session_state['etapa_atual'] == 5:
                     consentimento, alunos_necessidades, alunos_laudo,
                     distribuicao_nivel_infantil, distribuicao_nivel_anos_iniciais, distribuicao_nivel_anos_finais,
                     diagnosticos, outros_diagnosticos, tendencia_matriculas, professores_aee, profissionais_apoio, deficit_auxiliares,
-                    modalidade_atendimento, rotatividade_equipe, funcionamento_sala, recursos_tecnologia,
-                    aquisicao, participacao_capacitacao, adequacao_formacao, articulaxao_externa, prioridade,
+                    modalidade_atendimento, rotatividade_equipe, funcionamento_sala, recursos_tecnologia, outros_recursos_tecnologia,
+                    aquisicao, participacao_capacitacao, adequacao_formacao, articulaxao_externa, outros_articulaxao_externa, prioridade,
                     updated_at
                 ) VALUES (
                     %s, %s, %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s,
                     %s, %s, %s, %s, %s,
+                    %s, %s, %s, %s, %s, %s,
                     now()
                 )
                 RETURNING id;
@@ -793,10 +811,12 @@ elif st.session_state['etapa_atual'] == 5:
                     dados.get("rotatividade_equipe"),
                     dados.get("funcionamento_sala"),
                     dados.get("recursos_tecnologia"),
+                    dados.get("outros_recursos_tecnologia"),
                     dados.get("aquisicao"),
                     dados.get("participacao_capacitacao"),
                     dados.get("adequacao_formacao"),
                     dados.get("articulaxao_externa"),
+                    dados.get("outros_articulaxao_externa"),
                     dados.get("prioridade")
                 )
             )
